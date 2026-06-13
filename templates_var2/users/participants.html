@@ -21,9 +21,9 @@
         <span class="filter-label">Фильтр по навыкам:</span>
         <div class="filter-chips">
             {% for skill in all_skills %}
-            <a href="?skill={{ skill }}"
-               class="filter-chip {% if active_skill == skill %}active{% endif %}">
-                {{ skill }}
+            <a href="?skill={{ skill.name }}"
+               class="filter-chip {% if active_skill == skill.name %}active{% endif %}">
+                {{ skill.name }}
             </a>
             {% endfor %}
             {% if active_skill %}
@@ -38,7 +38,7 @@
         <div class="participant-card">
             <div class="participant-card-header">
                 {% if participant.avatar %}
-                    <img src="{{ participant.avatar.url }}" alt="Аватар участника" class="participant-avatar">
+                    <img src="{{ participant.avatar_url }}" alt="Аватар участника" class="participant-avatar">
                 {% else %}
                     <img src="{% static 'images/default-avatar.png' %}" alt="Аватар по умолчанию" class="participant-avatar">
                 {% endif %}

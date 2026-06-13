@@ -5,7 +5,7 @@
         <div class="project-card-header">
             <div class="project-owner-grid">
                 {% if project.owner.avatar %}
-                    <img src="{{ project.owner.avatar.url }}" alt="Аватар" class="avatar">
+                    <img src="{{ project.owner.avatar_url }}" alt="Аватар" class="avatar">
                 {% else %}
                     <img src="{% static 'images/default-avatar.png' %}" alt="Аватар по умолчанию" class="avatar">
                 {% endif %}

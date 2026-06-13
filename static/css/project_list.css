@@ -268,3 +268,30 @@
     color: white;
     border-color: #333;
 }
+
+.card-participate-btn {
+    background: #111;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+    outline: none;
+}
+
+.card-participate-btn:hover {
+    background: #333;
+}
+
+.card-participate-btn.participating {
+    background: #e5e5e5;
+    color: #333;
+    border: 1px solid #ccc;
+}
+
+.card-participate-btn.participating:hover {
+    background: #d4d4d4;
+}

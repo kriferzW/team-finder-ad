@@ -12,17 +12,58 @@
     <h2>Регистрация</h2>
     <form method="post">
         {% csrf_token %}
-        <div class="name-fields">
-            <div>{{ form.name.label_tag }} {{ form.name }}</div>
-            <div>{{ form.surname.label_tag }} {{ form.surname }}</div>
+
+        {% for field in form %}
+        <div class="form-field">
+            {{ field.label_tag }}
+            {{ field }}
+            {% if field.errors %}
+            <div style="color: red;">{{ field.errors }}</div>
+            {% endif %}
         </div>
-        {{ form.email.label_tag }} {{ form.email }}
-        {{ form.password.label_tag }} {{ form.password }}
-        {% for error in form.errors.values %}
-        <p style="color: red;">{{error}}</p>
         {% endfor %}
+
+        {% if form.non_field_errors %}
+        <div style="color: red;">{{ form.non_field_errors }}</div>
+        {% endif %}
+
         <button type="submit">Зарегистрироваться</button>
     </form>
     <p class="auth-link">Уже есть аккаунт? <a href="{% url 'users:login' %}">Войти</a></p>
 </div>
+
+<datalist id="skills-datalist">
+  {% for skill in all_skills %}
+    <option value="{{ skill.name }}"></option>
+  {% endfor %}
+</datalist>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const input = document.querySelector('input[name="skills"]');
+    if (!input) return;
+    
+    input.setAttribute('list', 'skills-datalist');
+    
+    let lastValue = input.value;
+    input.addEventListener('input', () => {
+        const val = input.value;
+        const options = Array.from(document.getElementById('skills-datalist').options).map(o => o.value);
+        
+        if (options.includes(val)) {
+            const parts = lastValue.split(',').map(p => p.trim()).filter(Boolean);
+            if (parts.length > 0) {
+                parts[parts.length - 1] = val;
+                const uniqueParts = Array.from(new Set(parts));
+                input.value = uniqueParts.join(', ') + ', ';
+            } else {
+                input.value = val + ', ';
+            }
+        }
+        lastValue = input.value;
+    });
+});
+</script>
 {% endblock %}

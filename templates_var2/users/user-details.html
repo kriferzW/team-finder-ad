@@ -7,17 +7,60 @@
 <link rel="stylesheet" href="{% static 'css/project_list.css' %}">
 <link rel="stylesheet" href="{% static 'css/profile.css' %}">
 <link rel="stylesheet" href="{% static 'css/skills.css' %}">
+<style>
+    .hidden {
+        display: none !important;
+    }
+
+    .skill-input-wrapper {
+        margin-top: 10px;
+        position: relative;
+        display: inline-block;
+    }
+
+    .skill-input-wrapper input {
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+
+    .skill-suggestions {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: #fff;
+        border: 1px solid #ccc;
+        border-top: none;
+        border-radius: 0 0 4px 4px;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        z-index: 1000;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    .skill-suggestions li {
+        padding: 8px 12px;
+        cursor: pointer;
+    }
+
+    .skill-suggestions li:hover {
+        background-color: #f5f5f5;
+    }
+</style>
 {% endblock %}
 
-{% with page_id="profile" %}
 {% block content %}
 <div class="profile-container">
     <div class="profile-header">
         <div class="profile-info">
             {% if user.avatar %}
-                <img src="{{ user.avatar.url }}" alt="Аватар" class="profile-avatar">
+            <img src="{{ user.avatar_url }}" alt="Аватар" class="profile-avatar">
             {% else %}
-                <img src="{% static 'images/default-avatar.png' %}" alt="Аватар по умолчанию" class="profile-avatar">
+            <img src="{% static 'images/default-avatar.png' %}" alt="Аватар по умолчанию" class="profile-avatar">
             {% endif %}
             <div class="profile-details">
                 <h2 class="profile-name">{{ user.name }} {{ user.surname }}</h2>
@@ -40,9 +83,7 @@
             </div>
         </div>
         <div class="profile-actions">
-            <a href="#"
-               class="black-button black-button-share share-button"
-               data-url="/users/{{ user.id }}">
+            <a href="#" class="black-button black-button-share share-button" data-url="/users/{{ user.id }}">
                 {% include 'includes/svg/share.html' %}
             </a>
             {% if request.user.id == user.id %}
@@ -62,22 +103,23 @@
     <div class="profile-skills">
         <div id="skills-container" class="skills-container" data-user-id="{{ user.id }}">
             {% for skill in user.skills.all %}
-                <span class="skill-chip" data-id="{{ skill.id }}">
-                    {{ skill.name }}
-                    {% if request.user.id == user.id %}
-                        <button type="button" class="remove-skill-btn" aria-label="Удалить" title="Удалить">×</button>
-                    {% endif %}
-                </span>
+            <span class="skill-chip" data-id="{{ skill.id }}">
+                {{ skill.name }}
+                {% if request.user.id == user.id %}
+                <button type="button" class="remove-skill-btn" aria-label="Удалить" title="Удалить">×</button>
+                {% endif %}
+            </span>
             {% empty %}
-                <span class="skill-empty">Навыки не указаны</span>
+            <span class="skill-empty">Навыки не указаны</span>
             {% endfor %}
 
             {% if request.user.id == user.id %}
-                <button type="button" id="add-skill-btn" class="add-skill-btn">+ Добавить навык</button>
+            <button type="button" id="add-skill-btn" class="add-skill-btn">+ Добавить навык</button>
             {% endif %}
         </div>
+
         <div id="skill-input-wrapper" class="skill-input-wrapper hidden">
-            <input type="text" id="skill-input" placeholder="Введите навык..." autocomplete="off"/>
+            <input type="text" id="skill-input" placeholder="Введите навык..." autocomplete="off" />
             <ul id="skill-suggestions" class="skill-suggestions hidden"></ul>
         </div>
     </div>
@@ -91,11 +133,11 @@
                 <h4><a href="/projects/{{ project.id }}">{{ project.name }}</a></h4>
                 <span class="project-status-black">
                     {% if project.status == "open" %}
-                        Открыт
+                    Открыт
                     {% elif project.status == "closed" %}
-                        Закрыт
+                    Закрыт
                     {% else %}
-                        {{ project.status }}
+                    {{ project.status }}
                     {% endif %}
                 </span>
             </div>
@@ -105,21 +147,11 @@
                 </div>
                 <div class="collapsed-project-card-footer">
                     <p class="project-date">{{ project.created_at|date:"d.m.Y" }}</p>
-                    {% with count=project.participants.count %}
+
                     <div class="project-participants">
                         {% include 'includes/svg/participants.html' %}
-                        {{ count }}
-                        {% if count|add:'-11'|divisibleby:100 or count|add:'-12'|divisibleby:100 or count|add:'-13'|divisibleby:100 or count|add:'-14'|divisibleby:100 %}
-                            участников
-                        {% elif count|add:'-1'|divisibleby:10 %}
-                            участник
-                        {% elif count|add:'-2'|divisibleby:10 or count|add:'-3'|divisibleby:10 or count|add:'-4'|divisibleby:10 %}
-                            участника
-                        {% else %}
-                            участников
-                        {% endif %}
+                        {{ project.participants.count }} участников
                     </div>
-                    {% endwith %}
                 </div>
             </div>
         </div>
@@ -129,4 +161,7 @@
     </div>
 </div>
 {% endblock %}
-{% endwith %}
+
+{% block extra_js %}
+<script src="{% static 'js/skills.js' %}"></script>
+{% endblock %}

@@ -25,7 +25,7 @@
                 </a>
                 <a class="user-menu nav-link">
                     {% if request.user.avatar %}
-                        <img src="{{ request.user.avatar.url }}" alt="Аватар" class="avatar">
+                        <img src="{{ request.user.avatar_url }}" alt="Аватар" class="avatar">
                     {% else %}
                         <img src="{% static 'images/default-avatar.png' %}" alt="Аватар по умолчанию" class="avatar">
                     {% endif %}

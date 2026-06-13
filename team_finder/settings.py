@@ -43,6 +43,7 @@ ROOT_URLCONF = "team_finder.urls"
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        # Указываем папку именно твоего второго варианта
         'DIRS': [BASE_DIR / 'templates_var2'],
         'APP_DIRS': True,
         'OPTIONS': {

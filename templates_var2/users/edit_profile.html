@@ -6,27 +6,81 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/auth.css' %}">
 <link rel="stylesheet" href="{% static 'css/profile_edit.css' %}">
+<style>
+    /* Дополнительные стили, чтобы поля гарантированно не скрывались версткой */
+    .form-field input,
+    .form-field textarea {
+        display: block !important;
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    .profile-edit-header-preview {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        margin: 20px auto 30px auto !important;
+        text-align: center !important;
+        border-bottom: 1px solid #f0f0f5 !important;
+        padding-bottom: 24px !important;
+        width: 100% !important;
+    }
+
+    .preview-avatar {
+        width: 120px !important;
+        height: 120px !important;
+        border-radius: 50% !important;
+        object-fit: cover !important;
+        margin-bottom: 12px !important;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .preview-avatar-placeholder {
+        width: 120px !important;
+        height: 120px !important;
+        border-radius: 50% !important;
+        background-color: #6366f1 !important;
+        color: white !important;
+        font-size: 38px !important;
+        font-weight: 600 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        margin-bottom: 12px !important;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .preview-name {
+        font-size: 20px !important;
+        font-weight: 600 !important;
+        color: #111 !important;
+        margin: 0 !important;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
 <div class="profile-edit-container">
     <h2 class="form-title">Редактирование профиля</h2>
+
+    <div class="profile-edit-header-preview">
+        {% if request.user.avatar %}
+            <img src="{{ request.user.avatar_url }}" alt="Аватар" class="preview-avatar">
+        {% else %}
+            <div class="preview-avatar-placeholder">
+                {{ request.user.name|slice:":1" }}{% if request.user.surname %}{{ request.user.surname|slice:":1" }}{% endif %}
+            </div>
+        {% endif %}
+        <h3 class="preview-name">{{ request.user.name }} {{ request.user.surname }}</h3>
+    </div>
+
     <form method="post" enctype="multipart/form-data" class="profile-edit-form">
         {% csrf_token %}
-
-        <div class="avatar-upload">
-            <div class="avatar-preview">
-                {% if user.avatar %}
-                    <img src="{{ user.avatar.url }}" alt="Аватар">
-                {% else %}
-                    <img src="{% static 'images/default-avatar.png' %}" alt="Аватар по умолчанию">
-                {% endif %}
-                <div class="overlay">
-                    <button type="button" onclick="document.getElementById('id_avatar').click()">Заменить</button>
-                </div>
-            </div>
-            {{ form.avatar }}
-        </div>
 
         <div class="form-row">
             <div class="form-field">
@@ -40,8 +94,23 @@
         </div>
 
         <div class="form-field">
+            {{ form.email.label_tag }}
+            {{ form.email }}
+        </div>
+
+        <div class="form-field">
+            <label for="id_avatar">Аватар профиля:</label>
+            {{ form.avatar }}
+        </div>
+
+        <div class="form-field">
             {{ form.about.label_tag }}
             {{ form.about }}
+        </div>
+
+        <div class="form-field">
+            {{ form.skills.label_tag }}
+            {{ form.skills }}
         </div>
 
         <div class="form-row">
@@ -58,15 +127,15 @@
         {% if form.errors %}
         <div class="form-errors">
             {% for field, errors in form.errors.items %}
-                {% for error in errors %}
-                    <p>{{ error }}</p>
-                {% endfor %}
+            {% for error in errors %}
+            <p style="color: red;">{{ error }}</p>
+            {% endfor %}
             {% endfor %}
         </div>
         {% endif %}
 
         <div class="form-actions">
-            <a href="/users/{{ user.id }}" class="cancel-button">Отмена</a>
+            <a href="/users/{{ request.user.pk }}/" class="cancel-button">Отмена</a>
             <button type="submit" class="save-button">Сохранить</button>
         </div>
     </form>

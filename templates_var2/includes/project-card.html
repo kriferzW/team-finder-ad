@@ -5,7 +5,7 @@
         <div class="project-card-header">
             <div class="project-owner-grid">
                 {% if project.owner.avatar %}
-                    <img src="{{ project.owner.avatar.url }}" alt="Аватар" class="avatar">
+                    <img src="{{ project.owner.avatar_url }}" alt="Аватар" class="avatar">
                 {% else %}
                     <img src="{% static 'images/default-avatar.png' %}" alt="Аватар по умолчанию" class="avatar">
                 {% endif %}
@@ -31,10 +31,27 @@
                 {{ project.status }}
             {% endif %}
         </span>
+
+        {% if user.is_authenticated and user.id != project.owner.id and project.status == "open" %}
+            <button class="card-participate-btn {% if request.user in project.participants.all %}participating{% endif %}"
+                    data-project="{{ project.id }}"
+                    data-user-id="{{ request.user.id }}"
+                    data-user-name="{{ request.user.name }} {{ request.user.surname }}"
+                    data-user-avatar="{% if request.user.avatar %}{{ request.user.avatar_url }}{% else %}{% static 'images/default-avatar.png' %}{% endif %}"
+            >
+                {% if request.user in project.participants.all %}
+                    Ливнуть
+                {% else %}
+                    Присоединиться
+                {% endif %}
+            </button>
+        {% endif %}
+
         {% with count=project.participants.count %}
         <div class="project-participants">
             {% include 'includes/svg/participants.html' %}
-            {{ count }}
+            <span class="participants-count-val">{{ count }}</span>
+            <span class="participants-count-text">
             {% if count|add:'-11'|divisibleby:100 or count|add:'-12'|divisibleby:100 or count|add:'-13'|divisibleby:100 or count|add:'-14'|divisibleby:100 %}
                 участников
             {% elif count|add:'-1'|divisibleby:10 %}
@@ -44,6 +61,7 @@
             {% else %}
                 участников
             {% endif %}
+            </span>
         </div>
         {% endwith %}
     </div>
