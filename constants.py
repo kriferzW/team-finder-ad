@@ -8,24 +8,31 @@ MAX_USER_SURNAME_LENGTH = 124
 MAX_USER_PHONE_LENGTH = 12
 MAX_USER_ABOUT_LENGTH = 256
 MAX_SKILL_NAME_LENGTH = 124
+MAX_AVATAR_URL_LENGTH = 500
 
 # Статусы проекта для выпадающего списка
+PROJECT_STATUS_OPEN = "open"
+PROJECT_STATUS_CLOSED = "closed"
+
 PROJECT_STATUS_CHOICES = [
-    ('open', 'Open'),
-    ('closed', 'Closed'),
+    (PROJECT_STATUS_OPEN, "Open"),
+    (PROJECT_STATUS_CLOSED, "Closed"),
 ]
 
 # Настройки пагинации и лимитов
 PROJECTS_PER_PAGE = 12
 USERS_PER_PAGE = 12
+AUTOCOMPLETE_MAX_RESULTS = 10
 SKILL_AUTOCOMPLETE_LIMIT = 10
 
 # Регулярные выражения и домены для валидации
-PHONE_REGEX = re.compile(r'^(8|\+7)\d{10}$')
+PHONE_REGEX = re.compile(r"^(8|\+7)\d{10}$")
 GITHUB_DOMAIN = "github.com"
 
 # Официальные тексты ошибок для Django-форм
-ERROR_PHONE_FORMAT = "Номер телефона должен быть в формате 8XXXXXXXXXX или +7XXXXXXXXXX."
+ERROR_PHONE_FORMAT = (
+    "Номер телефона должен быть в формате 8XXXXXXXXXX или +7XXXXXXXXXX."
+)
 ERROR_PHONE_DUPLICATE = "Пользователь с таким номером телефона уже зарегистрирован."
 ERROR_GITHUB_LINK = "Ссылка должна вести именно на домен github.com"
 ERROR_AUTH_FAILED = "Неверный имейл или пароль"
@@ -34,7 +41,13 @@ ERROR_OLD_PASSWORD_WRONG = "Неверный старый пароль."
 
 # Палитра приятных цветов для генерации автоматических аватарок (RGB)
 AVATAR_BG_COLORS = [
-    (100, 149, 237), (70, 130, 180), (46, 139, 87),
-    (102, 205, 170), (176, 196, 222), (218, 165, 32),
-    (188, 143, 143), (139, 115, 85), (205, 133, 63)
+    (100, 149, 237),
+    (70, 130, 180),
+    (46, 139, 87),
+    (102, 205, 170),
+    (176, 196, 222),
+    (218, 165, 32),
+    (188, 143, 143),
+    (139, 115, 85),
+    (205, 133, 63),
 ]

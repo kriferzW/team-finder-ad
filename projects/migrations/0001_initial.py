@@ -7,24 +7,52 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Project',
+            name="Project",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=200, verbose_name='Название проекта')),
-                ('description', models.TextField(verbose_name='Описание проекта')),
-                ('github_url', models.URLField(blank=True, verbose_name='Ссылка на GitHub проекта')),
-                ('status', models.CharField(choices=[('open', 'Open'), ('closed', 'Closed')], default='open', max_length=6, verbose_name='Статус проекта')),
-                ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(max_length=200, verbose_name="Название проекта"),
+                ),
+                ("description", models.TextField(verbose_name="Описание проекта")),
+                (
+                    "github_url",
+                    models.URLField(
+                        blank=True, verbose_name="Ссылка на GitHub проекта"
+                    ),
+                ),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[("open", "Open"), ("closed", "Closed")],
+                        default="open",
+                        max_length=6,
+                        verbose_name="Статус проекта",
+                    ),
+                ),
+                (
+                    "created_at",
+                    models.DateTimeField(
+                        auto_now_add=True, verbose_name="Дата создания"
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Проект',
-                'verbose_name_plural': 'Проекты',
-                'ordering': ['-created_at'],
+                "verbose_name": "Проект",
+                "verbose_name_plural": "Проекты",
+                "ordering": ["-created_at"],
             },
         ),
     ]
